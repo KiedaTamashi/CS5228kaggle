@@ -9,3 +9,8 @@
 3)You STILL need to use something like clustermap to find the correlations and decide the input to model. 
 
 4)BUT I am sure that each column is a meaningful feature now. ——from TZW
+
+!!!!!!!!! Please use following link to attend the report writting in Overleaf !!!!!!!!!!!!
+
+Actually I use a template of MCM data mining task i used last year
+https://www.overleaf.com/9188697662zmmytfgfzhhh
