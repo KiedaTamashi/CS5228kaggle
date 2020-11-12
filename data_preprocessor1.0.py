@@ -122,9 +122,21 @@ def preprocess_all(X_path , out_csv_name):
         return num
 
 
+
     DisbursementGrosss['DisbursementGross'] = DisbursementGrosss['DisbursementGross'].map(lambda x:foogross(x))
     SBA_Appvs['SBA_Appv'] = SBA_Appvs['SBA_Appv'].map(lambda x:foogross(x))
     GrAppvs['GrAppv'] = GrAppvs['GrAppv'].map(lambda  x:foogross(x))
+
+    tem = SBA_Appvs.copy()
+    tem.rename(columns={'SBA_Appv': 'DisbursementGross'}, inplace=True)
+    Disbursement_ratios = DisbursementGrosss.iloc[:,1:].div(tem.iloc[:,1:],axis = 0)
+    Disbursement_ratios.rename(columns={'DisbursementGross':'Disbursement_ratio'},inplace = True )
+    Disbursement_ratios['Id'] = DisbursementGrosss['Id'].copy()
+
+    tem.rename(columns={'DisbursementGross':'GrAppv'},inplace = True)
+    SBA_Appv_ratios = tem.iloc[:,1:].div(GrAppvs.iloc[:,1:],axis = 0)
+    SBA_Appv_ratios.rename(columns={'GrAppv':'SBA_Appv_ratio'},inplace = True)
+    SBA_Appv_ratios['Id'] = GrAppvs['Id'].copy()
 
     # Gross TODO (?) I just load pre1.0.csv from Wang.
     #d = pd.read_csv("Xtrain_pre1.0.csv")
@@ -133,12 +145,11 @@ def preprocess_all(X_path , out_csv_name):
     from functools import reduce
 
     dfs = [Names, Banks, BankStates, NAICSs,ApprovalDates,ApprovalFYs,Terms,NoEmps,NewExists,CreateJobs,RetainedJobs,
-           FranchiseCodes,UrbanRurals,RevLineCrs,LowDocs,DisbursementGrosss,SBA_Appvs,GrAppvs]
+           FranchiseCodes,UrbanRurals,RevLineCrs,LowDocs,DisbursementGrosss,SBA_Appvs,GrAppvs,Disbursement_ratios,SBA_Appv_ratios]
     df_final = reduce(lambda left,right: pd.merge(left,right), dfs)
-
     df_final.to_csv(out_csv_name,index=False,header=['Id','Name','Bank','BankState','NAICS','ApprovalDate', 'ApprovalFY', 'Term', 'NoEmp',
                                           'NewExist','CreateJob', 'RetainedJob', 'FranchiseCode', 'UrbanRural','RevLineCr','LowDoc',
-                                          "DisbursementGross","SBA_Appv","GrAppv"])
+                                          "DisbursementGross","SBA_Appv","GrAppv","Disbursement_ratio","SBA_Appv_ratio"])
 
 # a= pd.read_csv("NewExists_to_DisbursementDates.csv")
 # b= pd.read_csv("NAICS_to_NoEmp.csv")
@@ -153,4 +164,4 @@ def preprocess_all(X_path , out_csv_name):
 #                                       "DisbursementGross","SBA_Appv","GrAppv"])
 
 if __name__=="__main__":
-    preprocess_all(X_path="./Xtest.csv", out_csv_name="Xtest_pre.csv")
+    preprocess_all(X_path="./Xtrain.csv", out_csv_name="Xtrain_pre3.0.csv")
