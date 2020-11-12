@@ -115,6 +115,7 @@ def fooTerm(x):
         return 1
 
 def fooApprovalFYs(x):
+    x = str(x)
     if x[-1] == 'A':
         x = x[:-1]
     x = int(x)
