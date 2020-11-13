@@ -153,7 +153,10 @@ def fooRetainedJobs(x):
 FranchiseCodesIdx = np.load("FranchiseCodesIdx.npy")
 def fooFranchiseCodesIdx(x):
     if x in FranchiseCodesIdx:
-        return list(FranchiseCodesIdx).index(x)+1
+        try:
+            return list(FranchiseCodesIdx).index(x)+1
+        except:
+            return 0
     else:
         return 0
 
@@ -175,4 +178,7 @@ def fooDisbursementDate(x,np_index,values):
     avg = np.average(values)
     if not x == x:
         return avg
-    return values[list(np_index).index(x)]
+    try:
+        return values[list(np_index).index(x)]
+    except:
+        return 0.001
